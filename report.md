@@ -474,6 +474,255 @@ Successfully exporting this environment is necessary before every build.
 
 ![screenshot-23](./Screenshots/23_espidf_export_success.png)
 
+### **6.4 Performing a Fresh Full Clean and Rebuild (Blink Project)**
+
+After fixing the ESP-IDF environment, a clean rebuild was performed to ensure that all components compile correctly from scratch.  
+This is important for reproducibility and ensures no old build files cause issues.
+
+#### 🔧 Commands Used
+```bash
+idf.py fullclean
+idf.py build
+```
+📝 Simple Explanation
+idf.py fullclean → removes all old build files and cached components
+
+idf.py build → configures and rebuilds the entire Blink project cleanly
+
+A successful clean build confirms that:
+
+the environment is fixed
+
+the toolchain works
+
+the Blink code compiles without errors
+
+🖼️ Clean Build Output
+
+![screenshot-24](./Screenshots/24_blink_fullclean_build.png)
+
+### **6.5 Creating the Flash Image for QEMU (flash.bin)**
+
+ESP32 firmware cannot run directly as an ELF or a single `.bin` file.  
+QEMU requires a **complete flash image** that includes:
+
+- Bootloader  
+- Partition Table  
+- Application Binary (`blink.bin`)  
+
+These must be merged using `esptool.py`.
+
+#### 🔧 Command Used
+```bash
+esptool.py --chip esp32 merge_bin -o flash.bin \
+  0x1000  build/bootloader/bootloader.bin \
+  0x8000  build/partition_table/partition-table.bin \
+  0x10000 build/blink.bin
+```
+📝 Simple Explanation
+merge_bin → combines multiple binaries into one flash image
+
+0x1000 → bootloader address
+
+0x8000 → partition table address
+
+0x10000 → application start address
+
+Output: flash.bin → required for QEMU
+
+This step prepares a valid ESP32 flash layout for emulation.
+
+🖼️ Flash Image Creation Output
+
+![screenshot-25](./Screenshots/25_blink_build_flashbin_created.png)
+
+
+### **6.6 First Successful QEMU Boot (Blink Application)**
+
+After preparing the correct `flash.bin`, the Blink firmware was executed in QEMU.  
+QEMU successfully initialized the ESP32 bootloader and loaded the firmware just like real hardware.
+
+#### 🔧 Command Used
+```bash
+~/qemu/build/qemu-system-xtensa \
+  -nographic \
+  -machine esp32 \
+  -drive file=flash.bin,if=mtd,format=raw
+```
+📝 Simple Explanation
+-nographic → run QEMU in terminal mode
+
+-machine esp32 → uses Espressif’s ESP32 machine model
+
+-drive file=flash.bin → loads the full flash image
+
+if=mtd → specifies memory-tech-device (SPI flash)
+
+format=raw → reads the file as a raw flash image
+
+This is the correct way to run ESP32 apps in QEMU.
+
+🖼️ Bootloader & Partition Table Output
+
+![screenshot-26](./Screenshots/26_qemu_bootloader_blink.png)
+
+### **6.7 Application Startup Inside QEMU (Blink App Running)**
+
+After the bootloader completed, QEMU successfully started the Blink application.  
+This section of the log shows the ESP-IDF runtime initializing and calling `app_main()`.
+
+#### 📝 What This Output Shows
+- CPU0 & CPU1 start running FreeRTOS  
+- ESP-IDF system services are initialized  
+- The Blink application is loaded from flash  
+- The firmware begins executing on the virtual ESP32  
+
+This confirms that the emulator has fully transitioned from bootloader → application.
+
+#### 🖼️ QEMU Application Start Output
+![QEMU Application Start](./Screenshots/27_qemu_blink_app_start.png)
+
+### **6.8 LED Toggle Output in QEMU (Blink Successfully Running)**
+
+Once the Blink firmware entered `app_main()`, it began printing the simulated LED toggle messages in a continuous loop.
+
+#### 📝 What This Output Shows
+- The Blink application is running exactly as intended  
+- `LED ON` and `LED OFF` messages alternate every 500 ms  
+- This mimics real hardware GPIO toggling, but using logs for QEMU  
+- Confirms that FreeRTOS task scheduling and delays work correctly  
+
+This is the main proof that the Blink application is successfully running under QEMU.
+
+#### 🖼️ LED Toggle Output
+![LED Toggle Output](./Screenshots/28_qemu_blink_led_output.png)
+
+### **6.9 Continuous LED Output (Long-Running Blink Application)**
+
+After starting successfully, the Blink application continues running inside QEMU without errors.  
+This screenshot captures the **extended LED ON/OFF output**, proving the firmware behaves normally over time.
+
+#### 📝 What This Output Shows
+- The program runs inside QEMU exactly like on a real ESP32  
+- FreeRTOS scheduling remains stable over long execution  
+- The log shows repeated:
+  - `LED ON`
+  - `LED OFF`
+- There are no crashes or boot loops  
+
+This confirms the Blink firmware is reliable inside the emulator.
+
+#### 🖼️ Long LED Output Log
+![Long LED Output](./Screenshots/29_full_led_output.png)
+
+## **7. Temperature Monitoring Application**
+### **7.1 Setting Up the Temperature Project**
+
+A second ESP-IDF application was created to simulate temperature readings.  
+This project is based on the default `hello_world` example and modified to print temperature values periodically.
+
+#### 🔧 Commands Used
+```bash
+cp -r ~/esp-idf-v5.1/examples/get-started/hello_world ~/temperature
+cd ~/temperature
+. ~/esp-idf-v5.1/export.sh
+```
+📝 Simple Explanation
+Copy example project → creates a new folder named temperature
+
+cd ~/temperature → enter the project
+
+export.sh → activates ESP-IDF so idf.py works
+
+This step prepares the environment before building the temperature firmware.
+
+🖼️ Environment Setup Screenshot
+
+![Long LED Output](./Screenshots/30_temperature_project_start_export.png)
+
+### **7.2 Creating the Flash Image and Running Temperature App in QEMU**
+
+After setting up the project, the next step was to build the firmware using `idf.py`.  
+During the build, ESP-IDF automatically verifies Python packages, toolchain paths, and component dependencies.
+
+#### 🔧 Command Used
+```bash
+idf.py build
+```
+📝 Simple Explanation
+idf.py build → compiles the temperature project
+
+During the build, ESP-IDF:
+
+checks Python requirements
+
+detects unused tools
+
+verifies toolchain installation
+
+compiles the source code
+
+The build proceeds successfully after environment activation
+
+This confirms the ESP-IDF v5.1 setup is correct and ready for generating firmware.
+
+🖼️ Build Output Screenshot
+
+![Long LED Output](./Screenshots/31_temperature_build_error_and_fix.png)
+
+
+After building the temperature firmware, all required binaries were merged into a single flash image (`flash.bin`) that QEMU can load.
+
+#### 🔧 Commands Used
+```bash
+esptool.py --chip esp32 merge_bin -o flash.bin \
+  0x1000  build/bootloader/bootloader.bin \
+  0x8000  build/partition_table/partition-table.bin \
+  0x10000 build/hello_world.bin
+
+truncate -s 4M flash.bin
+```
+📝 Simple Explanation
+merge_bin → combines bootloader + partition table + app
+
+truncate -s 4M → QEMU requires a 4 MB flash file
+
+This produces a QEMU-compatible flash image
+
+Then the firmware was executed in QEMU:
+
+```
+~/qemu/build/qemu-system-xtensa \
+  -nographic \
+  -machine esp32 \
+  -drive file=flash.bin,if=mtd,format=raw
+  ```
+QEMU boots the ESP32 just like real hardware
+
+Loads bootloader → partition table → application
+
+🖼️ Flash Merge + QEMU Boot Output
+
+![Long LED Output](./Screenshots/32_temperature_mergebin_qemu_output.png)
+
+### **7.4 Temperature Readings in QEMU (Application Running Successfully)**
+
+Once the temperature firmware started running, QEMU continuously printed simulated temperature values.  
+This verifies that the application logic, FreeRTOS timing, and logging all work correctly inside the emulator.
+
+#### 📝 What This Output Shows
+- ESP-IDF initialized successfully  
+- Application `app_main()` is running  
+- Temperature values are printed every second  
+- Readings vary between **26°C to 40°C** (simulated)  
+- QEMU runs the program stably without crashes  
+
+This confirms the temperature application behaves exactly like expected on an actual ESP32 board.
+
+#### 🖼️ Long Temperature Output Log
+![Temperature Output](./Screenshots/33_temperature_output_long.png)
+
+
 ## 11. Learnings (Useful for Open-Source Contributions)
 
 From this exercise, I learned:
