@@ -235,588 +235,244 @@ Enables idf.py globally
 📷 Screenshot 09 – Export & IDF version
 ![ESP-IDF export](./Screenshots/09_export_idf_version.png)
 
+### 📌 Screenshot 10 – Editing Blink Application Code
+
+### 🔧 Commands
+```bash
+cd blink
+nano main/main.c
+```
+📝 Simple Explanation
+cd blink → open the blink project folder
+
+nano main/main.c → edit the main application code
 ![ESP-IDF export](./Screenshots/10_blink_code.png)
+
+### 📌 Screenshot 11 – Blink Project Build Configuration
+
+### 🔧 Command
+```bash
+idf.py build
+```
+### 📝 Simple Explanation
+idf.py build → starts configuring and compiling the project
+(checks toolchain, creates build files)
 
 ![ESP-IDF export](./Screenshots/11_blink_build_config.png)
 
+## The Blink is built up
+
 ![ESP-IDF export](./Screenshots/12_blink_build_done.png)
+
+### 📌 Screenshot 13 – Wrong QEMU Command Attempt
+
+### 🔧 Command (Incorrect)
+```bash
+qemu-system-xtensa -machine esp32 -kernel build/blink.elf
+```
+### 📝 Simple Explanation
+
+This command is wrong because QEMU cannot run the ELF directly.
+
+ESP32 QEMU needs a flash image (flash.bin), not an ELF file.
+
+![ESP-IDF export](./Screenshots/13_qemu_wrong_command_attempt.png)
+
+### 📌 Screenshot 14 – Running ESP-IDF Install Script
+
+### 🔧 Command
+```bash
+./install.sh
+```
+📝 Simple Explanation
+Installs ESP-IDF tools such as compilers, Python packages, and required SDK components.
 
 ![ESP-IDF export](./Screenshots/14_espidf_install_tools.png)
 
-📷 Screenshot 15 – Export for ESP-IDF v5.1
+### 📌 Screenshot 15 – Exporting ESP-IDF v5.1 Environment
+
+### 🔧 Command
+```bash
+. ~/esp-idf-v5.1/export.sh
+```
+📝 Simple Explanation
+Activates ESP-IDF v5.1 environment so idf.py and compilers work properly.
 
 ![ESP-IDF export](./Screenshots/15_espidf_export_environment.png)
-4.4 Fixing Missing ESP-IDF Tools (Screenshot 22 & 23)
 
-While building the Blink project, ESP-IDF reported missing Python environment:
 
-idf.py: python_env/idf5.1_py3.10_env/bin/python doesn't exist
+### **5.3 Performing a Full Clean Build**
 
-🔧 Fix
-cd ~/esp-idf-v5.1
-./install.sh
-. ./export.sh
+A full clean build removes all previously generated build files.  
+This ensures the project compiles from scratch without using cached artifacts, which is important for reproducibility in open-source workflows.
 
-📷 Screenshot 22 – Missing tools warning
-
-📷 Screenshot 23 – Export success
-
-5. Creating the Blink Application (Screenshots 10–12)
-5.1 Creating and Editing the Blink Project (Screenshot 10)
-🔧 Commands
-cd ~/esp-idf-v5.1
-idf.py create-project blink
-cd blink
-nano main/main.c
-
-📝 Explanation
-
-Creates a template ESP-IDF project
-
-Editing main.c lets us simulate LED blinking with console logs
-
-📷 Screenshot 10 – Blink main.c
-
-5.2 Building the Blink Project (Screenshots 11 & 12)
-🔧 Command
-idf.py build
-
-📝 Explanation
-
-This performs:
-
-Toolchain detection
-
-CMake configuration
-
-App compilation
-
-Linking to produce blink.elf
-
-📷 Screenshot 11 – Build Setup
-
-📷 Screenshot 12 – Build Complete
-
-5.3 Full Clean & Rebuild (Screenshots 16 & 24)
-🔧 Commands
+#### 🔧 Commands Used
+```bash
 idf.py fullclean
 idf.py build
-
-📝 Explanation
-
-Ensures reproducible builds
-
-Deletes old build files
-
-Great for open-source CI/CD
-
-📷 Screenshot 16 – Full Clean + Build
-
-📷 Screenshot 24 – Clean Build (Final)
-
-6. Errors While Running Blink in QEMU (Screenshots 13, 20, 21)
-6.1 Wrong QEMU Command Attempts
-
-Several incorrect attempts were made using .elf directly:
-
-❌ Wrong Command
-qemu-system-xtensa -machine esp32 -kernel build/blink.elf
-
-📝 Why it Failed
-
-ESP32 QEMU requires:
-
-A flash image
-
-NOT a raw ELF
-
-Correct interface: if=mtd,format=raw
-
-📷 Screenshot 13 – Wrong command
-
-📷 Screenshot 20 – Incorrect kernel/BIOS mix
-
-📷 Screenshot 21 – Errors before using merge_bin
-
-7. Creating the Correct Flash Image (Screenshot 25)
-7.1 Merging Bootloader + Partitions + App
-🔧 Command
-cd ~/blink
-esptool.py --chip esp32 merge_bin -o flash.bin \
-  0x1000 build/bootloader/bootloader.bin \
-  0x8000 build/partition_table/partition-table.bin \
-  0x10000 build/blink.bin
-
-📝 Explanation
-
-ESP32 bootloader is always at 0x1000
-
-Partition table at 0x8000
-
-App binary at 0x10000
-
-📷 Screenshot 25
-
-7.2 Running Blink in QEMU (Screenshots 26–29)
-🔧 Correct Command
-~/qemu/build/qemu-system-xtensa \
-  -nographic \
-  -machine esp32 \
-  -drive file=flash.bin,if=mtd,format=raw
-
-📷 Screenshot 26 – QEMU Bootloader
-
-📷 Screenshot 27 – Blink App Start
-
-📷 Screenshot 28 – LED ON/OFF Output
-
-📷 Screenshot 29 – Continuous LED Logs
-
-8. Temperature Monitoring Application (Screenshots 30–33)
-8.1 Project Setup & Environment Export (Screenshot 30)
-🔧 Commands
-cp -r ~/esp-idf-v5.1/examples/get-started/hello_world ~/temperature
-cd ~/temperature
-. ~/esp-idf-v5.1/export.sh
-
-📷 Screenshot 30
-
-8.2 Building the Temperature App (Screenshot 31)
-🔧 Command
-idf.py build
-
-📝 Explanation
-
-Checks:
-
-Python packages
-
-ESP-IDF configuration
-
-Toolchain setup
-
-📷 Screenshot 31
-
-8.3 Creating Flash Image and Running QEMU (Screenshot 32)
-🔧 Command
-esptool.py --chip esp32 merge_bin -o flash.bin \
-  0x1000 build/bootloader/bootloader.bin \
-  0x8000 build/partition_table/partition-table.bin \
-  0x10000 build/hello_world.bin
-
-truncate -s 4M flash.bin
-
-~/qemu/build/qemu-system-xtensa \
-  -nographic \
-  -machine esp32 \
-  -drive file=flash.bin,if=mtd,format=raw
-
-📷 Screenshot 32
-
-8.4 Temperature Output in QEMU (Screenshot 33)
-
-The application prints simulated temperature values repeatedly.
-
-Example Output
-I (2729) TEMP: Temperature: 26 °C
-I (3739) TEMP: Temperature: 27 °C
-...
-
-📷 Screenshot 33
-
-### 4.3 Export the ESP-IDF environment
-
-To use `idf.py`, you must “activate” ESP-IDF in each new terminal:
-
-`cd ~/esp-idf # or ~/esp-idf-v5.1 for the v5.1 clone . ./export.sh # note the dot + space idf.py --version` 
-
--   `. ./export.sh` configures `PATH`, `IDF_PATH`, Python venv, etc.
-    
--   `idf.py --version` confirms the active ESP-IDF version.
-    
-
-📷 **Screenshot 09 – export + idf version (first clone)**  
-
-📷 **Screenshot 15 – export for ESP-IDF v5.1**  
-
-----------
-
-### 4.4 Fixing missing tools later
-
-At one point, running `idf.py` inside the Blink project failed because the venv for v5.1 was missing:
-
-`ERROR: … python_env/idf5.1_py3.10_env/bin/python doesn’t exist` 
-
-📷 **Screenshot 22 – Missing tools / reinstall request**  
-
-To fix it, I simply re-ran:
-
 ```
+
+📝 Simple Explanation
+idf.py fullclean → deletes the entire build/ directory
+
+idf.py build → configures and recompiles everything fresh
+
+🖼️ Build Output
+
+![screenshot-16](./Screenshots/16_blink_fullclean_build.png)
+    
+
+### **5.4 QEMU Configuration Error – Missing Python Dependency**
+
+During the QEMU configuration step, the build system reported that a required Python package (`tomli`) was missing.  
+This error prevents QEMU from generating its build files.
+
+#### 🔧 Command That Triggered the Error
+```bash
+../configure --target-list=xtensa-softmmu --enable-debug
+```
+📝 Simple Explanation
+The QEMU configuration script checks Python dependencies.
+
+It stops when tomli is not installed, which is required by Meson (QEMU’s build tool).
+
+🖼️ Error Output
+![screenshot-17](./Screenshots/17_qemu_configure_error_tomli.png)
+
+
+### **5.5 Installing Missing Python Dependency (tomli)**
+
+To fix the QEMU configuration error, the missing Python package `tomli` must be installed.  
+This package is required by Meson, the build system used by QEMU.
+
+#### 🔧 Command Used
+```bash
+sudo apt install python3-tomli
+```
+📝 Simple Explanation
+Installs the tomli module system-wide.
+
+After installation, QEMU configuration can proceed without errors.
+
+🖼️ Installation Output
+
+![screenshot-18](./Screenshots/18_fix_install_tomli.png)
+
+### **5.6 Successful QEMU Configuration**
+
+After installing the missing dependency (`tomli`), QEMU’s configuration completed successfully.  
+This step prepares all required build files using Meson and verifies the host system setup.
+
+#### 🔧 Command Used
+```bash
+../configure --target-list=xtensa-softmmu --enable-debug
+```
+📝 Simple Explanation
+Configures QEMU for the ESP32 (Xtensa) architecture
+
+Enables debug symbols
+
+Generates build instructions for Ninja
+
+Confirms that all dependencies are now correctly installed
+
+🖼️ Configuration Success Output
+
+![screenshot-19](./Screenshots/19_qemu_configure_success.png)
+
+### **5.7 Incorrect QEMU Kernel Command Attempt**
+
+Before using the correct flash image method, an attempt was made to run the Blink firmware using the `-kernel` option.  
+This approach does **not** work for ESP32 because the emulator expects a complete flash layout, not just the ELF file.
+
+#### 🔧 Command Used (Incorrect)
+```bash
+~/qemu/build/qemu-system-xtensa \
+  -machine esp32 \
+  -kernel build/blink.elf
+```
+📝 Simple Explanation
+-kernel loads a raw kernel image, but ESP32 firmware is not a Linux kernel
+
+QEMU warns that SPI flash is not initialized
+
+The emulator exits immediately
+
+This step documents an early mistake and helps new contributors understand the correct workflow.
+
+🖼️ Output Showing Incorrect Usage
+
+![screenshot-20](./Screenshots/20_wrong_qemu_kernel_command.png)
+
+## **6. Setting Up the Blink Application Flash Image**
+### **6.1 Build Completed but Flash Image Incorrectly Used**
+
+At this stage, the Blink project successfully built, but an incorrect flash image (`blink.bin`) was used when attempting to run QEMU.  
+QEMU requires a **merged flash image** created using `esptool.py merge_bin`.
+
+#### 🔧 Command Used (Incorrect Attempt)
+```bash
+idf.py build # then tried using build/blink.bin directly in QEMU
+```
+📝 Simple Explanation
+The build completed successfully, but only produced individual binaries.
+
+QEMU cannot run blink.bin alone—it needs a full flash layout (bootloader + partition table + app).
+
+This screenshot captures the moment before fixing the flash preparation process.
+
+🖼️ Build Output Showing the Issue
+
+![screenshot-21](./Screenshots/21_blink_build_and_flashbin_error.png)
+
+### **6.2 ESP-IDF Tools Missing – Reinstallation Required**
+
+While attempting to build again, ESP-IDF reported that some required tools were missing in the Python environment.  
+This happens when the ESP-IDF virtual environment is not fully installed or becomes corrupted.
+
+#### 🔧 Command That Triggered the Error
+```bash
+idf.py build
+```
+📝 Simple Explanation
+idf.py could not find required tools inside the ESP-IDF v5.1 environment
+
+The environment needed to be reinstalled using install.sh
+
+This is a common issue when switching between multiple ESP-IDF versions
+
+To fix this, ESP-IDF tools were reinstalled in the next step.
+
+🖼️ Output Showing Missing Tools
+
+![screenshot-22](./Screenshots/22_idf_missing_tools_reinstall.png)
+
+### **6.3 ESP-IDF v5.1 Environment Successfully Exported**
+
+After reinstalling the missing tools, the ESP-IDF v5.1 environment was successfully activated.  
+This ensures that all required compilers, Python packages, and paths are correctly set for building ESP32 projects.
+
+#### 🔧 Commands Used
+```bash
 cd ~/esp-idf-v5.1
-./install.sh
 . ./export.sh
-``` 
-
-📷 **Screenshot 23 – ESP-IDF v5.1 export success**  
-
-Now ESP-IDF v5.1 was fully functional.
-
-----------
-
-## 5. Creating the Blink Application (LED Toggle)
-
-### 5.1 Create project and edit `main.c`
-
 ```
-cd ~ cd esp-idf-v5.1
-idf.py create-project blink cd ~/blink
-nano main/main.c
-``` 
+📝 Simple Explanation
+cd ~/esp-idf-v5.1 → go to the ESP-IDF v5.1 folder
 
-I replaced the default code with a simple log-based blink:
+. ./export.sh → activates the ESP-IDF environment
 
-```
-#include  "freertos/FreeRTOS.h"  #include  "freertos/task.h"  #include  "esp_log.h"  static  const  char *TAG = "BLINK"; void  app_main(void)
-{ while (1) {
-        ESP_LOGI(TAG, "LED ON");
-        vTaskDelay(pdMS_TO_TICKS(500));
-        ESP_LOGI(TAG, "LED OFF");
-        vTaskDelay(pdMS_TO_TICKS(500));
-    }
-}
-``` 
+loads the correct Python virtual environment
 
-📷 **Screenshot 10 – `main.c` for Blink**  
+adds the Xtensa compiler to PATH
 
-----------
+enables idf.py
 
-### 5.2 First build of Blink
+Successfully exporting this environment is necessary before every build.
 
-```
-cd ~/blink
-idf.py build
-``` 
+🖼️ Export Success Output
 
-This command:
-
--   Configures CMake,
-    
--   Detects the Xtensa toolchain,
-    
--   Generates the `sdkconfig` file,
-    
--   Builds all components and links the final ELF (`build/blink.elf`).
-    
-
-📷 **Screenshot 11 – Build configuration and compile**  
-
-After configuration, the build finished successfully:
-
-📷 **Screenshot 12 – Blink build complete**  
-
-----------
-
-### 5.3 Cleaning and rebuilding (for reproducibility)
-
-To be sure the project builds cleanly from scratch, I used:
-
-`idf.py fullclean # remove build/ and managed components idf.py build # build again` 
-
-📷 **Screenshot 16 – Full clean + build (first time)**  
-
-Later (after fixing tools again) I repeated:
-
-📷 **Screenshot 24 – Full clean + build (final)**  
-
-This is a good practice for open-source work – it proves the project is reproducible on any clean machine.
-
-----------
-
-## 6. Early Attempts to Run Blink in QEMU (and Errors)
-
-Running ESP32 firmware in QEMU isn’t as simple as just pointing it at the ELF; you must provide a **flash image** or at least the right options.
-
-### 6.1 Wrong invocation #1 – treating ELF as flash
-
-```
-~/qemu/build/qemu-system-xtensa \
-  -nographic \
-  -machine esp32 \
-  -drive file=build/blink.elf,if=mtd,format=raw
-``` 
-
-QEMU reported:
-
--   “Error: only 2, 4, 8, 16 MB flash images are supported”
-    
--   “machine type does not support if=mtd,bus=0,unit=0”
-    
-
-📷 **Screenshot 13 – Wrong drive / flash usage**  
-
-📷 **Screenshot 20 – Another incorrect kernel/BIOS combination**  
-
-📷 **Screenshot 21 – Blink build + flashbin error**  
-
-These runs taught an important lesson: **QEMU’s ESP32 machine expects a flash image, not a raw ELF.**
-
-----------
-
-## 7. Generating a Proper Flash Image for Blink
-
-### 7.1 Create `flash.bin` from bootloader + partitions + app
-
-ESP-IDF prints a helpful command after build. I used it (adapted for my paths):
-
-```
-cd ~/blink
-esptool.py --chip esp32 merge_bin -o flash.bin \
-  0x1000  build/bootloader/bootloader.bin \
-  0x8000  build/partition_table/partition-table.bin \
-  0x10000 build/blink.bin
-``` 
-
--   `merge_bin` combines the bootloader, partition table and app into one flash layout.
-    
--   `0x1000`, `0x8000`, `0x10000` – standard ESP32 flash offsets.
-    
-
-📷 **Screenshot 25 – `flash.bin` created successfully**  
-
-Because QEMU expects a **fixed flash size**, I also truncated:
-
-`truncate -s 4M flash.bin # pad/resize flash image to 4 MB` 
-
-(Shown clearly in the temperature section as well.)
-
-----------
-
-### 7.2 First successful QEMU boot for Blink
-
-Finally, I could boot the firmware:
-
-```
-~/qemu/build/qemu-system-xtensa \
-  -nographic \
-  -machine esp32 \
-  -drive file=flash.bin,if=mtd,format=raw
-``` 
-
--   `-nographic` – disables GUI, uses terminal only.
-    
--   `-machine esp32` – use Espressif’s ESP32 machine model.
-    
--   `-drive …if=mtd,format=raw` – tells QEMU to treat `flash.bin` as SPI flash.
-    
-
-📷 **Screenshot 26 – ESP-IDF bootloader & partition table in QEMU**  
-
-📷 **Screenshot 27 – Application start & system info**  
-
-Logs show:
-
--   Bootloader banner
-    
--   Chip revision & frequency
-    
--   App name: `blink`
-    
--   ESP-IDF version: **v5.1**
-    
--   Starting scheduler on CPU0 & CPU1
-    
--   Calling `app_main()`
-    
-
-----------
-
-### 7.3 LED toggle logs in QEMU
-
-Once `app_main()` runs, the application prints:
-
-`LED ON
-LED OFF
-LED ON
-LED OFF
-...` 
-
-📷 **Screenshot 28 – LED ON/OFF logs start**  
-
-📷 **Screenshot 29 – Long LED output + QEMU termination**  
-
-This confirms the **Blink application runs continuously** in the emulator and behaves exactly like it would on real hardware (only the LED is “virtual”, represented by logs).
-
-----------
-
-## 8. Temperature Monitoring Application
-
-Next, I implemented a **temperature simulation** example based on `hello_world`.
-
-### 8.1 Create project and set up environment
-
-```
-cp -r ~/esp-idf-v5.1/examples/get-started/hello_world ~/temperature cd ~/temperature
-nano main/hello_world_main.c
-``` 
-
-`hello_world_main.c` was edited so that `app_main()` periodically prints random or incremental temperature values, tagged with `TEMP`.
-
-Initially, trying to build failed because `idf.py` wasn’t found in the current shell (environment not exported). I fixed it with:
-
-`. ~/esp-idf-v5.1/export.sh` 
-
-📷 **Screenshot 30 – Temperature project setup & export**  
-
-----------
-
-### 8.2 Building temperature firmware
-
-After exporting the environment, I ran:
-
-```
-cd ~/temperature
-idf.py build
-``` 
-
-This triggered the normal ESP-IDF build process:
-
--   Python requirements check
-    
--   Toolchain detection
-    
--   Project compile & link
-    
-
-📷 **Screenshot 31 – Build + Python / tool checks**  
-
-----------
-
-### 8.3 Merging binaries into `flash.bin` and running QEMU
-
-Similar to the Blink app, I created a flash image:
-
-```
-cd ~/temperature
-esptool.py --chip esp32 merge_bin -o flash.bin \
-  0x1000  build/bootloader/bootloader.bin \
-  0x8000  build/partition_table/partition-table.bin \
-  0x10000 build/hello_world.bin # Ensure size is 4 MB to satisfy QEMU  truncate -s 4M flash.bin
-``` 
-
-Then launched QEMU:
-
-```
-~/qemu/build/qemu-system-xtensa \
-  -nographic \
-  -machine esp32 \
-  -drive file=flash.bin,if=mtd,format=raw
-  ``` 
-
-📷 **Screenshot 32 – QEMU boot & temperature app flash image**  
-
-The log shows:
-
--   ESP-IDF v5.1 2nd-stage bootloader
-    
--   Partition table
-    
--   App loading from offset `0x10000`
-    
-
-----------
-
-### 8.4 QEMU runtime – temperature readings
-
-Once `app_main()` runs, the application prints simulated temperature values:
-
-```
-I (2729) TEMP: Temperature: 26 °C
-I (3739) TEMP: Temperature: 27 °C
-I (4739) TEMP: Temperature: 29 °C
-...
-``` 
-
-Temperatures vary between ~26 °C and 40 °C, demonstrating a continuous sensor reading loop.
-
-📷 **Screenshot 33 – Long temperature output & graceful termination**  
-
-The final line `QEMU: Terminated` confirms that the emulator session ended cleanly after producing the desired logs.
-
-----------
-
-## 9. Summary of Key Commands (Cheat-Sheet)
-
-### QEMU build (once per machine)
-
-```
-# Clone QEMU (Espressif fork) git clone https://github.com/espressif/qemu.git cd qemu mkdir build && cd build # Install missing libs if needed sudo apt install -y libgcrypt20-dev libslirp-dev python3-tomli # Configure & build ../configure --target-list=xtensa-softmmu --enable-debug
-ninja
-./qemu-system-xtensa --version
-``` 
-
-### ESP-IDF setup (once per clone)
-
-```
-git clone --recursive https://github.com/espressif/esp-idf.git esp-idf-v5.1 cd esp-idf-v5.1
-./install.sh
-. ./export.sh
-idf.py --version
-``` 
-
-### Build + run any ESP-IDF project on QEMU
-
-`# 1. Build project idf.py fullclean
-idf.py build # 2. Merge binaries into one flash image esptool.py --chip esp32 merge_bin -o flash.bin \
-  0x1000  build/bootloader/bootloader.bin \
-  0x8000  build/partition_table/partition-table.bin \
-  0x10000 build/<app>.bin # 3. Force flash size to 4 MB  truncate -s 4M flash.bin # 4. Run in QEMU ~/qemu/build/qemu-system-xtensa \
-  -nographic \
-  -machine esp32 \
-  -drive file=flash.bin,if=mtd,format=raw` 
-
-Replace `<app>.bin` with `blink.bin`, `hello_world.bin`, etc.
-
-----------
-
-## 10. Challenges & How They Were Solved
-
-Category
-
-Problem
-
-Fix
-
-System dependencies
-
-`gcrypt.h` / `libslirp.h` missing during QEMU build
-
-Installed `libgcrypt20-dev` and `libslirp-dev`
-
-Python packages
-
-QEMU configure: _No usable tomli_
-
-Installed `python3-tomli`
-
-ESP-IDF environment
-
-`idf.py` not found / Python venv missing
-
-Re-ran `./install.sh` and `. ./export.sh` for ESP-IDF v5.1
-
-QEMU flash handling
-
-Treating ELF as flash (`if=mtd` errors, wrong size)
-
-Used `esptool.py merge_bin` + `truncate -s 4M flash.bin`
-
-Reproducibility
-
-Stale build artifacts
-
-Regularly used `idf.py fullclean` before final builds
-
-----------
+![screenshot-23](./Screenshots/23_espidf_export_success.png)
 
 ## 11. Learnings (Useful for Open-Source Contributions)
 
