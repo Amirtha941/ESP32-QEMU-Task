@@ -1,17 +1,4 @@
-<h1 align="center">
-  <img src="https://img.shields.io/badge/ESP32%20Emulation%20Using%20QEMU-%F0%9F%9A%80-blueviolet?style=for-the-badge" /><br><br>
-  ⚡ ESP32 EMULATION USING QEMU & ESP-IDF ⚡
-</h1>
-
-<h3 align="center">A Complete Virtual IoT Development Environment — No Hardware Needed 🚀</h3>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Platform-Ubuntu%2022.04-orange?style=flat-square&logo=ubuntu" />
-  <img src="https://img.shields.io/badge/ESP--IDF-v5.1-blue?style=flat-square&logo=espressif" />
-  <img src="https://img.shields.io/badge/QEMU-9.2.2-success?style=flat-square&logo=qemu" />
-  <img src="https://img.shields.io/badge/Target-ESP32-green?style=flat-square&logo=espressif" />
-</p>
-
+# ESP32 EMULATION USING QEMU & ESP-IDF 
 
 This report documents, step-by-step, how I set up an **ESP32 emulation environment** using:
 
@@ -27,7 +14,7 @@ The report is written in a **beginner-friendly** way so that anyone familiar wit
 
 ---
 
-## 🟪 **1. System Information**
+## **1. System Information**
 
 | Item                     | Details (from commands & logs) |
 |--------------------------|---------------------------------|
