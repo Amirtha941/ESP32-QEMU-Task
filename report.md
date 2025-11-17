@@ -83,7 +83,10 @@ QEMU is a generic emulator. Espressif maintains a fork that adds ESP32 support.
 
 ```
 cd ~
-git clone https://github.com/espressif/qemu.git cd qemu mkdir build && cd build # First configure attempt ../configure --target-list=xtensa-softmmu --enable-debug
+git clone https://github.com/espressif/qemu.git 
+cd qemu 
+mkdir build && cd build # First configure attempt 
+../configure --target-list=xtensa-softmmu --enable-debug
 ``` 
 
 -   `git clone …` downloads the QEMU source.
@@ -128,6 +131,15 @@ This is a networking library QEMU uses. Fixed by:
 📷 **Screenshot 05 – libslirp error**  
 ![slirp error](./Screenshots/05_qemu_build_error_slirp.png)
 
+📷 **Screenshot 06 – libslirp install** 
+
+![slirp install](./Screenshots/06_slirp_install.png)
+
+📷 **Screenshot 07 – libslirp configuration** 
+
+![slirp install](./Screenshots/07_configure_slirp.png)
+
+
 ----------
 
 ### 3.4 Fix 3 – Python `tomli` missing
@@ -139,6 +151,8 @@ Later, while configuring QEMU again, the script reported:
 I installed the missing Python library:
 
 `sudo apt install python3-tomli` 
+
+>The screenshots for this available when tomli is again installed for esp-idf v5.1
 
 
 ### 3.5 Successful QEMU configuration & build
@@ -203,7 +217,7 @@ Later I also cloned the **v5.1 branch** separately (not shown again as code) and
 
 ----------
 
-## 4.3 Exporting the ESP-IDF Environment (Screenshots 09 & 15)
+## 4.3 Exporting the ESP-IDF Environment
 
 Before using any ESP-IDF command such as `idf.py build`, the environment must be activated.
 
