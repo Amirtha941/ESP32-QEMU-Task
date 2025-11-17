@@ -380,7 +380,7 @@ Confirms that all dependencies are now correctly installed
 
 ### 🖼️ Configuration Success Output
 
-![screenshot-19](../Screenshots/19_qemu_configure_success.png)
+![screenshot-19](./Screenshots/19_qemu_configure_success.png)
 
 ### **5.7 Incorrect QEMU Kernel Command Attempt**
 
@@ -583,7 +583,7 @@ This section of the log shows the ESP-IDF runtime initializing and calling `app_
 This confirms that the emulator has fully transitioned from bootloader → application.
 
 #### 🖼️ QEMU Application Start Output
-![QEMU Application Start](../Screenshots/27_qemu_blink_app_start.png)
+![QEMU Application Start](./Screenshots/27_qemu_blink_app_start.png)
 
 ### **6.8 LED Toggle Output in QEMU (Blink Successfully Running)**
 
