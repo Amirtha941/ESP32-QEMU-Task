@@ -602,7 +602,7 @@ Once the Blink firmware entered `app_main()`, it began printing the simulated LE
 This is the main proof that the Blink application is successfully running under QEMU.
 
 #### 🖼️ LED Toggle Output
-![LED Toggle Output](./Screenshots/28_qemu_blink_led_output.png)
+![QEMU Blink LED Output](Screenshots/30_qemu_blink_led_output.png)
 
 ### **6.9 Continuous LED Output (Long-Running Blink Application)**
 
@@ -620,7 +620,7 @@ This screenshot captures the **extended LED ON/OFF output**, proving the firmwar
 This confirms the Blink firmware is reliable inside the emulator.
 
 #### 🖼️ Long LED Output Log
-![Long LED Output](./Screenshots/29_full_led_output.png)
+![Full LED Output](Screenshots/31_full_led_output.png)
 
 ## **7. Temperature Monitoring Application**
 ### **7.1 Setting Up the Temperature Project**
@@ -645,7 +645,7 @@ This step prepares the environment before building the temperature firmware.
 
 ### 🖼️ Environment Setup Screenshot
 
-![Long LED Output](./Screenshots/30_temperature_project_start_export.png)
+![Temperature Project Start Export](Screenshots/32_temperature_project_start_export.png)
 
 ### **7.2 Creating the Flash Image and Running Temperature App in QEMU**
 
@@ -706,11 +706,11 @@ Loads bootloader → partition table → application
 
 ### 🖼️ Build Output Screenshot
 
-![Long LED Output](./Screenshots/31_temperature_build_error_and_fix.png)
+![Temperature Build Error & Fix](Screenshots/33_temperature_build_error_and_fix.png)
 
 ### 🖼️ Flash Merge + QEMU Boot Output
 
-![Long LED Output](./Screenshots/32_temperature_mergebin_qemu_output.png)
+![Temperature Mergebin QEMU Output](Screenshots/34_temperature_mergebin_qemu_output.png)
 
 ### **7.4 Temperature Readings in QEMU (Application Running Successfully)**
 
@@ -727,7 +727,8 @@ This verifies that the application logic, FreeRTOS timing, and logging all work 
 This confirms the temperature application behaves exactly like expected on an actual ESP32 board.
 
 #### 🖼️ Long Temperature Output Log
-![Temperature Output](./Screenshots/33_temperature_output_long.png)
+![Temperature Output Long](Screenshots/35_temperature_output_long.png)
+
 
 
 ## 8. Learnings 
