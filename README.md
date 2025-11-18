@@ -41,9 +41,9 @@ ESP32-QEMU-Emulation-Task/
 
 ## ⚙️ **Environment Used**
 
--   **OS:** Ubuntu / WSL2
+-   **OS:** Ubuntu
     
--   **ESP-IDF Version:** (add your version)
+-   **ESP-IDF Version:** v5.1
     
 -   **QEMU Commit/Branch:** esp_develop / esp32-fork
     
