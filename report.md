@@ -54,7 +54,7 @@ sudo apt install -y git python3 python3-pip cmake make gcc g++ \
     
 
 📷 **Prerequisite installation**  
-![Prerequisite installation](./Screenshots/01_prereq_install.png)
+![Prerequisite Installation](Screenshots/01_prereq_install.png)
 
 ----------
 
@@ -71,7 +71,7 @@ gcc --version
 This confirms all tools are installed and available in `PATH`.
 
 📷 **Tool verification**  
-![Tool verification](./Screenshots/02_tool_verification.png)
+![Tool Verification](Screenshots/02_tool_verification.png)
 
 ----------
 
@@ -99,7 +99,7 @@ mkdir build && cd build # First configure attempt
     
 
 📷 **clone & first configure**  
-![QEMU clone and configure](./Screenshots/03_qemu_clone_configure.png)
+![QEMU Clone & Configure](Screenshots/03_qemu_clone_configure.png)
 
 ----------
 
@@ -114,7 +114,7 @@ To fix this, I installed the development package:
 `sudo apt install -y libgcrypt20-dev` 
 
 📷 **gcrypt.h error**  
-![gcrypt error](./Screenshots/04_qemu_build_error_gcrypt.png)
+![QEMU Build Error gcrypt](Screenshots/04_qemu_build_error_gcrypt.png)
 
 ----------
 
@@ -129,15 +129,15 @@ This is a networking library QEMU uses. Fixed by:
 `sudo apt install -y libslirp-dev` 
 
 📷 **libslirp error**  
-![slirp error](./Screenshots/05_qemu_build_error_slirp.png)
+![QEMU Build Error slirp](Screenshots/05_qemu_build_error_slirp.png)
 
 📷 **libslirp install** 
 
-![slirp install](./Screenshots/06_slirp_install.png)
+![slirp Install](Screenshots/06_slirp_install.png)
 
 📷 **libslirp configuration** 
 
-![slirp install](./Screenshots/07_configure_slirp.png)
+![Configure slirp](Screenshots/07_configure_slirp.png)
 
 
 ----------
@@ -172,7 +172,7 @@ ninja
 ``` 
 
 📷 **QEMU built and version displayed**  
-![QEMU build success](./Screenshots/06_qemu_build_success.png)
+![QEMU Build Success](Screenshots/08_qemu_build_success.png)
 
 At this point, QEMU (with ESP32 support) was ready.
 
@@ -193,8 +193,7 @@ git clone --recursive https://github.com/espressif/esp-idf.git cd esp-idf
     
 
 📷 **ESP-IDF clone**  
-![ESP-IDF clone](./Screenshots/07_espidf_clone.png)
-
+![ESP-IDF Clone](Screenshots/09_espidf_clone.png)
 ----------
 
 ### 4.2 Install ESP-IDF tools
@@ -211,7 +210,7 @@ This script:
     
 
 📷 **First ESP-IDF tool installation**  
-![ESP-IDF install tools](./Screenshots/08_espidf_install_tools.png)
+![ESP-IDF Install Tools](Screenshots/10_espidf_install_tools.png)
 
 Later I also cloned the **v5.1 branch** separately (not shown again as code) and ran **another `./install.sh`**, visible here:
 
@@ -237,7 +236,7 @@ Adds toolchain binaries (xtensa compiler) to PATH
 Enables idf.py globally
 
 **Export & IDF version**
-![ESP-IDF export](./Screenshots/09_export_idf_version.png)
+![Export IDF Version](Screenshots/11_export_idf_version.png)
 
 ### 📌 Screenshot 12 – Blink Project Build Configuration
 
@@ -249,7 +248,7 @@ idf.py build
 `idf.py build` → starts configuring and compiling the project
 (checks toolchain, creates build files)
 
-![Screenshot-11](./Screenshots/11_blink_build_config.png)
+![Blink Build Config](Screenshots/12_blink_build_config.png)
 
 
 ### 📌Editing Blink Application Code
@@ -262,12 +261,13 @@ nano main/main.c
 📝 Simple Explanation
 `cd blink` → open the blink project folder
 `nano main/main.c` → edit the main application code
-![Screenshot-11](./Screenshots/10_blink_code.png)
+
+![Blink Code](Screenshots/13_blink_code.png)
 
 
 ## The Blink is built up
 
-![Screenshot-12](./Screenshots/12_blink_build_done.png)
+![Blink Build Done](Screenshots/14_blink_build_done.png)
 
 ### 📌Wrong QEMU Command Attempt
 
@@ -281,7 +281,7 @@ This command is wrong because QEMU cannot run the ELF directly.
 
 ESP32 QEMU needs a flash image (flash.bin), not an ELF file.
 
-![Screenshot-13](./Screenshots/13_qemu_wrong_command_attempt.png)
+![Wrong QEMU Command Attempt](Screenshots/15_qemu_wrong_command_attempt.png)
 
 
 ### 🔧 Command
@@ -291,7 +291,7 @@ ESP32 QEMU needs a flash image (flash.bin), not an ELF file.
 ### 📝 Simple Explanation
 Installs ESP-IDF tools such as compilers, Python packages, and required SDK components.
 
-![ESP-IDF export](./Screenshots/14_espidf_install_tools.png)
+![ESP-IDF Install Tools Again](Screenshots/16_espidf_install_tools.png)
 
 ### Exporting ESP-IDF v5.1 Environment
 
@@ -302,7 +302,7 @@ Installs ESP-IDF tools such as compilers, Python packages, and required SDK comp
 ### 📝 Simple Explanation
 Activates ESP-IDF v5.1 environment so idf.py and compilers work properly.
 
-![ESP-IDF export](./Screenshots/15_espidf_export_environment.png)
+![ESP-IDF Export Environment](Screenshots/17_espidf_export_environment.png)
 
 
 ### **5.3 Performing a Full Clean Build**
@@ -323,7 +323,7 @@ idf.py build
 
 ### 🖼️ Build Output
 
-![screenshot-16](./Screenshots/16_blink_fullclean_build.png)
+![Blink Fullclean Build](Screenshots/18_blink_fullclean_build.png)
     
 
 ### **5.4 QEMU Configuration Error – Missing Python Dependency**
@@ -341,7 +341,8 @@ The QEMU configuration script checks Python dependencies.
 It stops when tomli is not installed, which is required by Meson (QEMU’s build tool).
 
 ### 🖼️ Error Output
-![screenshot-17](./Screenshots/17_qemu_configure_error_tomli.png)
+
+![QEMU Configure Error tomli](Screenshots/19_qemu_configure_error_tomli.png)
 
 
 ### **5.5 Installing Missing Python Dependency (tomli)**
@@ -360,7 +361,7 @@ After installation, QEMU configuration can proceed without errors.
 
 ### 🖼️ Installation Output
 
-![screenshot-18](./Screenshots/18_fix_install_tomli.png)
+![Fix Install tomli](Screenshots/20_fix_install_tomli.png)
 
 ### **5.6 Successful QEMU Configuration**
 
@@ -380,7 +381,7 @@ Confirms that all dependencies are now correctly installed
 
 ### 🖼️ Configuration Success Output
 
-![screenshot-19](./Screenshots/19_qemu_configure_success.png)
+![QEMU Configure Success](Screenshots/21_qemu_configure_success.png)
 
 ### **5.7 Incorrect QEMU Kernel Command Attempt**
 
@@ -404,7 +405,7 @@ This step documents an early mistake and helps new contributors understand the c
 
 ### 🖼️ Output Showing Incorrect Usage
 
-![screenshot-20](./Screenshots/20_wrong_qemu_kernel_command.png)
+![Wrong QEMU Kernel Command](Screenshots/22_wrong_qemu_kernel_command.png)
 
 ## **6. Setting Up the Blink Application Flash Image**
 ### **6.1 Build Completed but Flash Image Incorrectly Used**
@@ -425,7 +426,7 @@ This screenshot captures the moment before fixing the flash preparation process.
 
 ### 🖼️ Build Output Showing the Issue
 
-![screenshot-21](./Screenshots/21_blink_build_and_flashbin_error.png)
+![Blink Build & Flashbin Error](Screenshots/23_blink_build_and_flashbin_error.png)
 
 ### **6.2 ESP-IDF Tools Missing – Reinstallation Required**
 
@@ -447,7 +448,7 @@ To fix this, ESP-IDF tools were reinstalled in the next step.
 
 ### 🖼️ Output Showing Missing Tools
 
-![screenshot-22](./Screenshots/22_idf_missing_tools_reinstall.png)
+![IDF Missing Tools Reinstall](Screenshots/24_idf_missing_tools_reinstall.png)
 
 ### **6.3 ESP-IDF v5.1 Environment Successfully Exported**
 
@@ -475,7 +476,8 @@ Successfully exporting this environment is necessary before every build.
 
 ### 🖼️ Export Success Output
 
-![screenshot-23](./Screenshots/23_espidf_export_success.png)
+![ESP-IDF Export Success](Screenshots/25_espidf_export_success.png)
+
 
 ### **6.4 Performing a Fresh Full Clean and Rebuild (Blink Project)**
 
@@ -502,7 +504,7 @@ the Blink code compiles without errors
 
 ### 🖼️ Clean Build Output
 
-![screenshot-24](./Screenshots/24_blink_fullclean_build.png)
+![Blink Fullclean Build](Screenshots/26_blink_fullclean_build.png)
 
 ### **6.5 Creating the Flash Image for QEMU (flash.bin)**
 
@@ -537,7 +539,7 @@ This step prepares a valid ESP32 flash layout for emulation.
 
 ### 🖼️ Flash Image Creation Output
 
-![screenshot-25](./Screenshots/25_blink_build_flashbin_created.png)
+![Blink Flashbin Created](Screenshots/27_blink_build_flashbin_created.png)
 
 
 ### **6.6 First Successful QEMU Boot (Blink Application)**
@@ -567,7 +569,8 @@ This is the correct way to run ESP32 apps in QEMU.
 
 🖼️ Bootloader & Partition Table Output
 
-![screenshot-26](./Screenshots/26_qemu_bootloader_blink.png)
+![QEMU Bootloader Blink](Screenshots/28_qemu_bootloader_blink.png)
+
 
 ### **6.7 Application Startup Inside QEMU (Blink App Running)**
 
@@ -583,7 +586,8 @@ This section of the log shows the ESP-IDF runtime initializing and calling `app_
 This confirms that the emulator has fully transitioned from bootloader → application.
 
 #### 🖼️ QEMU Application Start Output
-![QEMU Application Start](./Screenshots/27_qemu_blink_app_start.png)
+
+![QEMU Blink App Start](Screenshots/29_qemu_blink_app_start.png)
 
 ### **6.8 LED Toggle Output in QEMU (Blink Successfully Running)**
 
