@@ -13,7 +13,7 @@
    - [3.1 Clone and configure QEMU](#31-clone-and-configure-qemu)  
    - [3.2 Fix 1 – Missing gcrypth](#32-fix-1--missing-gcrypth)  
    - [3.3 Fix 2 – Missing libslirph](#33-fix-2--missing-libslirph)  
-   - [3.4 Fix 3 – Missing Python tomli](#34-fix-3--missing-python-tomli)  
+   - [3.4 Fix 3 – Missing Python tomli](#34-fix-3--python-tomli-missing)  
    - [3.5 Successful QEMU configuration & build](#35-successful-qemu-configuration--build)
 
 5. [Installing ESP-IDF](#4-installing-esp-idf)  
