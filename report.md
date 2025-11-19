@@ -2,47 +2,43 @@
 
 # Table of Contents
 
-1. [Introduction](#introduction)  
-2. [System Information](#1-system-information)  
+1. [Introduction](#introduction)
+2. [System Information](#system-information)
+3. [Installing Prerequisite Packages](#installing-prerequisite-packages)
+   1. [Install build tools and libraries](#install-build-tools-and-libraries)
+   2. [Verify key tools](#verify-key-tools)
+4. [Building QEMU (Espressif Fork)](#building-qemu-espressif-fork)
+   1. [Clone and configure QEMU](#clone-and-configure-qemu)
+   2. [Fix 1 – Missing gcrypt.h](#fix-1--missing-gcrypth)
+   3. [Fix 2 – Missing libslirp.h](#fix-2--missing-libslirph)
+   4. [Fix 3 – Missing Python tomli](#fix-3--python-tomli-missing)
+   5. [Successful QEMU configuration & build](#successful-qemu-configuration--build)
+5. [Installing ESP-IDF](#installing-esp-idf)
+   1. [Clone ESP-IDF](#clone-esp-idf)
+   2. [Install ESP-IDF tools](#install-esp-idf-tools)
+   3. [Export the ESP-IDF environment](#exporting-the-esp-idf-environment)
+6. [Blink Application Setup & Emulation](#blink-application-setup--emulation)
+   1. [Editing Blink code](#editing-blink-application-code)
+   2. [Performing a Full Clean Build](#performing-a-full-clean-build)
+   3. [Creating flash.bin](#creating-the-flash-image-for-qemu-flashbin)
+   4. [Running Blink in QEMU](#first-successful-qemu-boot-blink-application)
+   5. [Blink LED Output](#led-toggle-output-in-qemu-blink-successfully-running)
+7. [Temperature Monitoring Application](#temperature-monitoring-application)
+   1. [Setting Up the Temperature Project](#setting-up-the-temperature-project)
+   2. [Creating the Flash Image and Running in QEMU](#creating-the-flash-image-and-running-temperature-app-in-qemu)
+   3. [Temperature Readings Output](#temperature-readings-in-qemu-application-running-successfully)
+8. [Learnings](#learnings)
+9. [Potential Use in Platforms like Yaksh](#potential-use-in-platforms-like-yaksh)
+10. [Reflection: How This Work Enables Automated Evaluation on Yaksh](#reflection-how-this-work-enables-automated-evaluation-on-yaksh)
+    1. [Why Yaksh Needs ESP32 Emulation](#why-yaksh-needs-esp32-emulation)
+    2. [How Yaksh Would Use the QEMU Setup](#how-yaksh-would-use-the-qemu-setup)
+    3. [How My Work Helps Yaksh Integration](#how-my-work-directly-helps-build-yaksh-support-for-esp32)
+    4. [Mapping Learnings to Yaksh](#what-i-learned-that-maps-to-yaksh-integration)
+    5. [Example Yaksh Test Case](#what-a-yaksh-esp32-test-case-would-look-like)
+    6. [Final Thoughts](#final-thoughts)
+11. [Conclusion](#conclusion)
+12. [References](#references)
 
-3. [Installing Prerequisite Packages](#2-installing-prerequisite-packages)  
-   - [2.1 Install build tools and libraries](#21-install-build-tools-and-libraries)  
-   - [2.2 Verify key tools](#22-verify-key-tools)  
-
-4. [Building QEMU (Espressif Fork)](#3-building-qemu-espressif-fork)  
-   - [3.1 Clone and configure QEMU](#31-clone-and-configure-qemu)  
-   - [3.2 Fix 1 – Missing gcrypth](#32-fix-1--missing-gcrypth)  
-   - [3.3 Fix 2 – Missing libslirph](#33-fix-2--missing-libslirph)  
-   - [3.4 Fix 3 – Missing Python tomli](#34-fix-3--python-tomli-missing)  
-   - [3.5 Successful QEMU configuration & build](#35-successful-qemu-configuration--build)
-
-5. [Installing ESP-IDF](#4-installing-esp-idf)  
-   - [4.1 Clone ESP-IDF](#41-clone-esp-idf)  
-   - [4.2 Install ESP-IDF tools](#42-install-esp-idf-tools)  
-   - [4.3 Exporting the ESP-IDF environment](#43-exporting-the-esp-idf-environment)
-
-6. [Blink Application Setup & Emulation](#6-setting-up-the-blink-application-flash-image)  
-   - [Editing Blink code](#editing-blink-application-code)  
-   - [Full clean build](#53-performing-a-full-clean-build)  
-   - [Creating flash.bin](#65-creating-the-flash-image-for-qemu-flashbin)  
-   - [Running Blink in QEMU](#66-first-successful-qemu-boot-blink-application)  
-   - [Blink LED Output](#68-led-toggle-output-in-qemu-blink-successfully-running)
-
-7. [Temperature Monitoring Application](#7-temperature-monitoring-application)  
-   - [Setup & build](#71-setting-up-the-temperature-project)  
-   - [Merge flash image](#72-creating-the-flash-image-and-running-temperature-app-in-qemu)  
-   - [Run in QEMU](#72-creating-the-flash-image-and-running-temperature-app-in-qemu)  
-   - [Temperature output](#74-temperature-readings-in-qemu-application-running-successfully)
-
-8. [Learnings](#8-learnings)
-
-9. [Potential Use in Yaksh](#9-potential-use-in-platforms-like-yaksh)
-
-10. [Reflection: How This Enables Yaksh Automated Evaluation](#10-reflection-how-this-work-enables-automated-evaluation-on-yaksh)
-
-11. [Conclusion](#11-conclusion)
-
-12. [References](#12-References)
 
 
 This report documents, step-by-step, how I set up an **ESP32 emulation environment** using:
@@ -59,7 +55,7 @@ The report is written in a **beginner-friendly** way so that anyone familiar wit
 
 ---
 
-## **1. System Information**
+## **System Information**
 
 | Item                     | Details (from commands & logs) |
 |--------------------------|---------------------------------|
@@ -72,11 +68,11 @@ The report is written in a **beginner-friendly** way so that anyone familiar wit
 
 ---
 
-## 2. Installing Prerequisite Packages
+## Installing Prerequisite Packages
 
 Before building ESP-IDF and QEMU, I installed all development tools and libraries required.
 
-### 2.1 Install build tools and libraries
+### Install build tools and libraries
 
 ```bash
 sudo apt install -y git python3 python3-pip cmake make gcc g++ \
@@ -103,7 +99,7 @@ sudo apt install -y git python3 python3-pip cmake make gcc g++ \
 
 ----------
 
-### 2.2 Verify key tools
+### Verify key tools
 
 ```
 python3 -m pip install --user pyserial # serial communication helper git --version
@@ -120,11 +116,11 @@ This confirms all tools are installed and available in `PATH`.
 
 ----------
 
-## 3. Building QEMU (Espressif Fork)
+## Building QEMU (Espressif Fork)
 
 QEMU is a generic emulator. Espressif maintains a fork that adds ESP32 support.
 
-### 3.1 Clone and configure QEMU
+###  Clone and configure QEMU
 
 ```
 cd ~
@@ -148,7 +144,7 @@ mkdir build && cd build # First configure attempt
 
 ----------
 
-### 3.2 Fix 1 – Missing `gcrypt.h`
+### Fix 1 – Missing `gcrypt.h`
 
 Running `ninja` initially failed:
 
@@ -163,7 +159,7 @@ To fix this, I installed the development package:
 
 ----------
 
-### 3.3 Fix 2 – Missing `libslirp.h`
+###  Fix 2 – Missing `libslirp.h`
 
 The next `ninja` build stopped with:
 
@@ -187,7 +183,7 @@ This is a networking library QEMU uses. Fixed by:
 
 ----------
 
-### 3.4 Fix 3 – Python `tomli` missing
+### Fix 3 – Python `tomli` missing
 
 Later, while configuring QEMU again, the script reported:
 
@@ -200,7 +196,7 @@ I installed the missing Python library:
 >The screenshots for this available when tomli is again installed for esp-idf v5.1
 
 
-### 3.5 Successful QEMU configuration & build
+###  Successful QEMU configuration & build
 
 After fixing all dependencies, I ran configure again:
 
@@ -223,11 +219,11 @@ At this point, QEMU (with ESP32 support) was ready.
 
 ----------
 
-## 4. Installing ESP-IDF
+## Installing ESP-IDF
 
 ESP-IDF is the official framework for ESP32. I used **two clones** during experiments (master and v5.1 branch), but the final working setup uses **ESP-IDF v5.1**.
 
-### 4.1 Clone ESP-IDF
+###  Clone ESP-IDF
 
 ```
 cd ~
@@ -241,7 +237,7 @@ git clone --recursive https://github.com/espressif/esp-idf.git cd esp-idf
 ![ESP-IDF Clone](Screenshots/09_espidf_clone.png)
 ----------
 
-### 4.2 Install ESP-IDF tools
+###  Install ESP-IDF tools
 
 `./install.sh` 
 
@@ -261,7 +257,7 @@ Later I also cloned the **v5.1 branch** separately (not shown again as code) and
 
 ----------
 
-### 4.3 Exporting the ESP-IDF Environment
+### Exporting the ESP-IDF Environment
 
 Before using any ESP-IDF command such as `idf.py build`, the environment must be activated.
 
@@ -350,7 +346,7 @@ Activates ESP-IDF v5.1 environment so idf.py and compilers work properly.
 ![ESP-IDF Export Environment](Screenshots/17_espidf_export_environment.png)
 
 
-### **5.3 Performing a Full Clean Build**
+### **Performing a Full Clean Build**
 
 A full clean build removes all previously generated build files.  
 This ensures the project compiles from scratch without using cached artifacts, which is important for reproducibility in open-source workflows.
@@ -371,7 +367,7 @@ idf.py build
 ![Blink Fullclean Build](Screenshots/18_blink_fullclean_build.png)
     
 
-### **5.4 QEMU Configuration Error – Missing Python Dependency**
+### **QEMU Configuration Error – Missing Python Dependency**
 
 During the QEMU configuration step, the build system reported that a required Python package (`tomli`) was missing.  
 This error prevents QEMU from generating its build files.
@@ -390,7 +386,7 @@ It stops when tomli is not installed, which is required by Meson (QEMU’s build
 ![QEMU Configure Error tomli](Screenshots/19_qemu_configure_error_tomli.png)
 
 
-### **5.5 Installing Missing Python Dependency (tomli)**
+### **Installing Missing Python Dependency (tomli)**
 
 To fix the QEMU configuration error, the missing Python package `tomli` must be installed.  
 This package is required by Meson, the build system used by QEMU.
@@ -408,7 +404,7 @@ After installation, QEMU configuration can proceed without errors.
 
 ![Fix Install tomli](Screenshots/20_fix_install_tomli.png)
 
-### **5.6 Successful QEMU Configuration**
+### **Successful QEMU Configuration**
 
 After installing the missing dependency (`tomli`), QEMU’s configuration completed successfully.  
 This step prepares all required build files using Meson and verifies the host system setup.
@@ -428,7 +424,7 @@ Confirms that all dependencies are now correctly installed
 
 ![QEMU Configure Success](Screenshots/21_qemu_configure_success.png)
 
-### **5.7 Incorrect QEMU Kernel Command Attempt**
+### **Incorrect QEMU Kernel Command Attempt**
 
 Before using the correct flash image method, an attempt was made to run the Blink firmware using the `-kernel` option.  
 This approach does **not** work for ESP32 because the emulator expects a complete flash layout, not just the ELF file.
@@ -452,8 +448,9 @@ This step documents an early mistake and helps new contributors understand the c
 
 ![Wrong QEMU Kernel Command](Screenshots/22_wrong_qemu_kernel_command.png)
 
-## **6. Setting Up the Blink Application Flash Image**
-### **6.1 Build Completed but Flash Image Incorrectly Used**
+## **Setting Up the Blink Application Flash Image**
+
+### **Build Completed but Flash Image Incorrectly Used**
 
 At this stage, the Blink project successfully built, but an incorrect flash image (`blink.bin`) was used when attempting to run QEMU.  
 QEMU requires a **merged flash image** created using `esptool.py merge_bin`.
@@ -473,7 +470,7 @@ This screenshot captures the moment before fixing the flash preparation process.
 
 ![Blink Build & Flashbin Error](Screenshots/23_blink_build_and_flashbin_error.png)
 
-### **6.2 ESP-IDF Tools Missing – Reinstallation Required**
+### **ESP-IDF Tools Missing – Reinstallation Required**
 
 While attempting to build again, ESP-IDF reported that some required tools were missing in the Python environment.  
 This happens when the ESP-IDF virtual environment is not fully installed or becomes corrupted.
@@ -495,7 +492,7 @@ To fix this, ESP-IDF tools were reinstalled in the next step.
 
 ![IDF Missing Tools Reinstall](Screenshots/24_idf_missing_tools_reinstall.png)
 
-### **6.3 ESP-IDF v5.1 Environment Successfully Exported**
+### **ESP-IDF v5.1 Environment Successfully Exported**
 
 After reinstalling the missing tools, the ESP-IDF v5.1 environment was successfully activated.  
 This ensures that all required compilers, Python packages, and paths are correctly set for building ESP32 projects.
@@ -524,7 +521,7 @@ Successfully exporting this environment is necessary before every build.
 ![ESP-IDF Export Success](Screenshots/25_espidf_export_success.png)
 
 
-### **6.4 Performing a Fresh Full Clean and Rebuild (Blink Project)**
+### **Performing a Fresh Full Clean and Rebuild (Blink Project)**
 
 After fixing the ESP-IDF environment, a clean rebuild was performed to ensure that all components compile correctly from scratch.  
 This is important for reproducibility and ensures no old build files cause issues.
@@ -551,7 +548,7 @@ the Blink code compiles without errors
 
 ![Blink Fullclean Build](Screenshots/26_blink_fullclean_build.png)
 
-### **6.5 Creating the Flash Image for QEMU (flash.bin)**
+### **Creating the Flash Image for QEMU (flash.bin)**
 
 ESP32 firmware cannot run directly as an ELF or a single `.bin` file.  
 QEMU requires a **complete flash image** that includes:
@@ -587,7 +584,7 @@ This step prepares a valid ESP32 flash layout for emulation.
 ![Blink Flashbin Created](Screenshots/27_blink_build_flashbin_created.png)
 
 
-### **6.6 First Successful QEMU Boot (Blink Application)**
+### **First Successful QEMU Boot (Blink Application)**
 
 After preparing the correct `flash.bin`, the Blink firmware was executed in QEMU.  
 QEMU successfully initialized the ESP32 bootloader and loaded the firmware just like real hardware.
@@ -617,7 +614,7 @@ This is the correct way to run ESP32 apps in QEMU.
 ![QEMU Bootloader Blink](Screenshots/28_qemu_bootloader_blink.png)
 
 
-### **6.7 Application Startup Inside QEMU (Blink App Running)**
+### **Application Startup Inside QEMU (Blink App Running)**
 
 After the bootloader completed, QEMU successfully started the Blink application.  
 This section of the log shows the ESP-IDF runtime initializing and calling `app_main()`.
@@ -634,7 +631,7 @@ This confirms that the emulator has fully transitioned from bootloader → appli
 
 ![QEMU Blink App Start](Screenshots/29_qemu_blink_app_start.png)
 
-### **6.8 LED Toggle Output in QEMU (Blink Successfully Running)**
+### **LED Toggle Output in QEMU (Blink Successfully Running)**
 
 Once the Blink firmware entered `app_main()`, it began printing the simulated LED toggle messages in a continuous loop.
 
@@ -649,7 +646,7 @@ This is the main proof that the Blink application is successfully running under 
 #### 🖼️ LED Toggle Output
 ![QEMU Blink LED Output](Screenshots/30_qemu_blink_led_output.png)
 
-### **6.9 Continuous LED Output (Long-Running Blink Application)**
+### **Continuous LED Output (Long-Running Blink Application)**
 
 After starting successfully, the Blink application continues running inside QEMU without errors.  
 This screenshot captures the **extended LED ON/OFF output**, proving the firmware behaves normally over time.
@@ -667,8 +664,8 @@ This confirms the Blink firmware is reliable inside the emulator.
 #### 🖼️ Long LED Output Log
 ![Full LED Output](Screenshots/31_full_led_output.png)
 
-## **7. Temperature Monitoring Application**
-### **7.1 Setting Up the Temperature Project**
+## **Temperature Monitoring Application**
+### **Setting Up the Temperature Project**
 
 A second ESP-IDF application was created to simulate temperature readings.  
 This project is based on the default `hello_world` example and modified to print temperature values periodically.
@@ -692,7 +689,7 @@ This step prepares the environment before building the temperature firmware.
 
 ![Temperature Project Start Export](Screenshots/32_temperature_project_start_export.png)
 
-### **7.2 Creating the Flash Image and Running Temperature App in QEMU**
+### **Creating the Flash Image and Running Temperature App in QEMU**
 
 After setting up the project, the next step was to build the firmware using `idf.py`.  
 During the build, ESP-IDF automatically verifies Python packages, toolchain paths, and component dependencies.
@@ -701,7 +698,7 @@ During the build, ESP-IDF automatically verifies Python packages, toolchain path
 ```bash
 idf.py build
 ```
-📝 Simple Explanation
+### 📝 Simple Explanation
 `idf.py build` → compiles the temperature project
 
 During the build, ESP-IDF:
@@ -757,7 +754,7 @@ Loads bootloader → partition table → application
 
 ![Temperature Mergebin QEMU Output](Screenshots/34_temperature_mergebin_qemu_output.png)
 
-### **7.4 Temperature Readings in QEMU (Application Running Successfully)**
+### **Temperature Readings in QEMU (Application Running Successfully)**
 
 Once the temperature firmware started running, QEMU continuously printed simulated temperature values.  
 This verifies that the application logic, FreeRTOS timing, and logging all work correctly inside the emulator.
@@ -776,7 +773,7 @@ This confirms the temperature application behaves exactly like expected on an ac
 
 
 
-## 8. Learnings 
+## Learnings 
 
 From this exercise, I learned:
 
@@ -804,7 +801,7 @@ These skills are directly relevant when:
 
 ----------
 
-## 9. Potential Use in Platforms like Yaksh
+## Potential Use in Platforms like Yaksh
 
 With this setup:
 
@@ -824,14 +821,14 @@ This removes the need for physical ESP32 hardware while still keeping behavior c
 ----------
 
 
-# **10. Reflection: How This Work Enables Automated Evaluation on Yaksh**
+# **Reflection: How This Work Enables Automated Evaluation on Yaksh**
 
 The entire purpose of this task is not only to emulate the ESP32, but to understand **how this QEMU-based setup can be integrated into Yaksh**, the online coding evaluation system used by IIT Bombay (FOSSEE).  
 Below is a clear reflection on how this work fits into Yaksh and why it is important.
 
 ----------
 
-## **10.1 Why Yaksh Needs ESP32 Emulation**
+## **Why Yaksh Needs ESP32 Emulation**
 
 Yaksh is designed to automatically check code submissions for Python, C/C++, MATLAB, etc.  
 But embedded systems code is harder because normally it requires:
@@ -858,7 +855,7 @@ This makes ESP32 programming compatible with Yaksh’s evaluation workflow.
 
 ----------
 
-## **10.2 How Yaksh Would Use the QEMU Setup**
+## **How Yaksh Would Use the QEMU Setup**
 
 Yaksh evaluates code using a **test script** that runs after a student submits their code.  
 Using your setup, the test pipeline would look like this:
@@ -867,7 +864,7 @@ Using your setup, the test pipeline would look like this:
 
 (e.g., Blink or Temperature code)
 
-### **2. Yaksh’s test script runs:**
+### **Yaksh’s test script runs:**
 
 ```
 idf.py build
@@ -875,7 +872,7 @@ esptool.py merge_bin ...
 qemu-system-xtensa -nographic -machine esp32 -drive file=flash.bin,if=mtd,format=raw
 ``` 
 
-### **3. The script captures QEMU’s output:**
+### **The script captures QEMU’s output:**
 
 `LED ON LED OFF` 
 
@@ -883,7 +880,7 @@ or
 
 `Temperature: 27 °C  Temperature: 30 °C` 
 
-### **4. Yaksh compares it with expected output using regex:**
+### **Yaksh compares it with expected output using regex:**
 
 Examples:
 
@@ -895,14 +892,14 @@ Examples:
 
 `Should print a value  every  second  within a valid range (e.g., 20°C–60°C)` 
 
-### **5. Yaksh grades automatically**
+### **Yaksh grades automatically**
 
 No human involvement is needed.  
 Your QEMU setup makes embedded code _behave like normal terminal output_, which Yaksh can parse easily.
 
 ----------
 
-## **10.3 How My Work Directly Helps Build Yaksh Support for ESP32**
+## **How My Work Directly Helps Build Yaksh Support for ESP32**
 
 By completing this project, I now understand:
 
@@ -921,7 +918,7 @@ This knowledge is exactly what Yaksh requires to build a **generic ESP32 evaluat
 
 ----------
 
-## **10.4 What I Learned That Maps to Yaksh Integration**
+## ** What I Learned That Maps to Yaksh Integration**
 
 |                           Learning                           |            Why it matters for Yaksh           |
 |:------------------------------------------------------------:|:---------------------------------------------:|
@@ -940,7 +937,7 @@ inside Yaksh → allow IoT programming courses **without hardware**.
 
 ----------
 
-## **10.5 What a Yaksh ESP32 Test Case Would Look Like**
+## **What a Yaksh ESP32 Test Case Would Look Like**
 
 Below is an example of what a Yaksh evaluator could run:
 
@@ -957,7 +954,7 @@ If the pattern is found → Yaksh auto-grades as correct.
 
 ----------
 
-## **10.6 Final Thoughts**
+## **Final Thoughts**
 
 This task helped me see how **hardware emulation** and **online evaluation systems** come together.  
 With QEMU, ESP-IDF, and clear documentation, we can create:
@@ -971,7 +968,7 @@ With QEMU, ESP-IDF, and clear documentation, we can create:
 
 This drastically reduces dependency on physical devices and enables true open-source, scalable embedded education.
 
-## 11. Conclusion
+## Conclusion
 
 This report demonstrated, step by step:
 
@@ -996,7 +993,7 @@ With the commands and screenshots provided, **any beginner** should be able to:
 -   Understand what each command does, and
 -   Use this setup as a foundation for further open-source contributions to ESP-IDF and ESP32 emulation.
 
-## 12. References
+## References
 
 1. **QEMU Official Documentation**  
    https://www.qemu.org/docs/master/
