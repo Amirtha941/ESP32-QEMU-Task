@@ -1,5 +1,50 @@
 # ESP32 EMULATION USING QEMU & ESP-IDF 
 
+# Table of Contents
+
+1. [Introduction](#introduction)  
+2. [System Information](#1-system-information)  
+
+3. [Installing Prerequisite Packages](#2-installing-prerequisite-packages)  
+   - [2.1 Install build tools and libraries](#21-install-build-tools-and-libraries)  
+   - [2.2 Verify key tools](#22-verify-key-tools)  
+
+4. [Building QEMU (Espressif Fork)](#3-building-qemu-espressif-fork)  
+   - [3.1 Clone and configure QEMU](#31-clone-and-configure-qemu)  
+   - [3.2 Fix 1 – Missing gcrypth](#32-fix-1--missing-gcrypth)  
+   - [3.3 Fix 2 – Missing libslirph](#33-fix-2--missing-libslirph)  
+   - [3.4 Fix 3 – Missing Python tomli](#34-fix-3--missing-python-tomli)  
+   - [3.5 Successful QEMU configuration & build](#35-successful-qemu-configuration--build)
+
+5. [Installing ESP-IDF](#4-installing-esp-idf)  
+   - [4.1 Clone ESP-IDF](#41-clone-esp-idf)  
+   - [4.2 Install ESP-IDF tools](#42-install-esp-idf-tools)  
+   - [4.3 Exporting the ESP-IDF environment](#43-exporting-the-esp-idf-environment)
+
+6. [Blink Application Setup & Emulation](#6-setting-up-the-blink-application-flash-image)  
+   - [Editing Blink code](#editing-blink-application-code)  
+   - [Full clean build](#53-performing-a-full-clean-build)  
+   - [Creating flash.bin](#65-creating-the-flash-image-for-qemu-flashbin)  
+   - [Running Blink in QEMU](#66-first-successful-qemu-boot-blink-application)  
+   - [Blink LED Output](#68-led-toggle-output-in-qemu-blink-successfully-running)
+
+7. [Temperature Monitoring Application](#7-temperature-monitoring-application)  
+   - [Setup & build](#71-setting-up-the-temperature-project)  
+   - [Merge flash image](#72-creating-the-flash-image-and-running-temperature-app-in-qemu)  
+   - [Run in QEMU](#72-creating-the-flash-image-and-running-temperature-app-in-qemu)  
+   - [Temperature output](#74-temperature-readings-in-qemu-application-running-successfully)
+
+8. [Learnings](#8-learnings)
+
+9. [Potential Use in Yaksh](#9-potential-use-in-platforms-like-yaksh)
+
+10. [Reflection: How This Enables Yaksh Automated Evaluation](#10-reflection-how-this-work-enables-automated-evaluation-on-yaksh)
+
+11. [Conclusion](#11-conclusion)
+
+12. [References](#12-References)
+
+
 This report documents, step-by-step, how I set up an **ESP32 emulation environment** using:
 
 - **QEMU (Espressif fork)** – to emulate the ESP32 chip  
@@ -950,3 +995,33 @@ With the commands and screenshots provided, **any beginner** should be able to:
 -   Reproduce the environment,    
 -   Understand what each command does, and
 -   Use this setup as a foundation for further open-source contributions to ESP-IDF and ESP32 emulation.
+
+## 12.References
+
+1. **QEMU Official Documentation**  
+   https://www.qemu.org/docs/master/
+
+2. **Espressif QEMU GitHub Repository**  
+   https://github.com/espressif/qemu
+
+3. **Espressif QEMU Wiki (Using QEMU for ESP32)**  
+   https://github.com/espressif/qemu/wiki/Using-QEMU-for-ESP32
+
+4. **ESP-IDF Get Started Guide**  
+   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html
+
+5. **ESP-IDF Linux / macOS Setup**  
+   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/linux-macos-setup.html
+
+6. **ESP-IDF GPIO API Reference**  
+   https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/gpio.html
+
+7. **ESP-IDF Example Projects**  
+   https://github.com/espressif/esp-idf/tree/master/examples/get-started
+
+8. **Espressif Blog – ESP32 Emulation**  
+   https://blog.espressif.com/
+
+9. **Yaksh – Python Based Online Evaluation Platform (FOSSEE IIT Bombay)**  
+   https://github.com/FOSSEE/online_test
+
