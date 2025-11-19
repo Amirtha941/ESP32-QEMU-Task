@@ -33,13 +33,14 @@
     1. [Why Yaksh Needs ESP32 Emulation](#why-yaksh-needs-esp32-emulation)
     2. [How Yaksh Would Use the QEMU Setup](#how-yaksh-would-use-the-qemu-setup)
     3. [How My Work Helps Yaksh Integration](#how-my-work-directly-helps-build-yaksh-support-for-esp32)
-    4. [Mapping Learnings to Yaksh](#what-i-learned-that-maps-to-yaksh-integration)
-    5. [Example Yaksh Test Case](#what-a-yaksh-esp32-test-case-would-look-like)
-    6. [Final Thoughts](#final-thoughts)
+    4. [Mapping Learnings to Yaksh](#what-i-learned-that-maps-to-yaksh-integration) 
+    6. [Example Yaksh Test Case](#what-a-yaksh-esp32-test-case-would-look-like)
+    7. [Final Thoughts](#final-thoughts)
 11. [Conclusion](#conclusion)
 12. [References](#references)
 
 
+## Introduction
 
 This report documents, step-by-step, how I set up an **ESP32 emulation environment** using:
 
@@ -279,7 +280,7 @@ Enables idf.py globally
 **Export & IDF version**
 ![Export IDF Version](Screenshots/11_export_idf_version.png)
 
-### 📌 Screenshot 12 – Blink Project Build Configuration
+### Blink Application Setup & Emulation
 
 ### 🔧 Command
 ```bash
