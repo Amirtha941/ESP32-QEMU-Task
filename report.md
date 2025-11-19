@@ -996,7 +996,7 @@ With the commands and screenshots provided, **any beginner** should be able to:
 -   Understand what each command does, and
 -   Use this setup as a foundation for further open-source contributions to ESP-IDF and ESP32 emulation.
 
-## 12.References
+## 12. References
 
 1. **QEMU Official Documentation**  
    https://www.qemu.org/docs/master/
