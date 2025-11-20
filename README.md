@@ -32,7 +32,7 @@ The project demonstrates how ESP32 programs can run **without real hardware**, e
 
 ----------
 
-# 🧩 Overview
+# Overview
 
 This project emulates an **ESP32 microcontroller** entirely in software.  
 No physical development board is required.
@@ -58,7 +58,7 @@ This task demonstrates complete understanding of the ESP-IDF toolchain, QEMU set
 
 ----------
 
-# 🖥️ What is an Emulator?
+# What is an Emulator?
 
 An **emulator** is software that mimics real hardware behavior.
 
@@ -84,7 +84,7 @@ So you can run:
 
 ----------
 
-# ⚙️ What is QEMU?
+# What is QEMU?
 
 **QEMU (Quick Emulator)** is a popular open-source system emulator.  
 Espressif maintains a special QEMU fork that adds:
@@ -102,7 +102,7 @@ This project uses the **Espressif fork** of QEMU to run ESP32 firmware virtually
 
 ----------
 
-# 🎓 What is Yaksh?
+# What is Yaksh?
 
 **Yaksh** is IIT Bombay’s automated assignment evaluation platform.
 
@@ -130,7 +130,7 @@ This enables **scalable hardware programming labs** without physical devices.
 
 ----------
 
-# 📂 Repository Structure
+# Repository Structure
 ```
 `ESP32-QEMU-Emulation-Task/
 │
@@ -167,7 +167,7 @@ This enables **scalable hardware programming labs** without physical devices.
 ```
 ----------
 
-# ⚙️ Environment Used
+# Environment Used
 
 -   **OS:** Ubuntu 22.04.5 LTS (inside Oracle VirtualBox)
     
@@ -182,9 +182,9 @@ This enables **scalable hardware programming labs** without physical devices.
 
 ----------
 
-# 🧪 Programs Included
+# Programs Included
 
-## 1️⃣ LED Blink (Simulated)
+##  LED Blink (Simulated)
 
 -   Virtual LED toggling
     
@@ -193,7 +193,7 @@ This enables **scalable hardware programming labs** without physical devices.
     `LED ON LED OFF` 
     
 
-## 2️⃣ Temperature Sensor Simulation
+##  Temperature Sensor Simulation
 
 -   Generates random temperature values
     
@@ -206,7 +206,7 @@ This enables **scalable hardware programming labs** without physical devices.
 
 ----------
 
-# ▶️ Building & Running in QEMU
+#  Building & Running in QEMU
 
 ### **Build**
 
@@ -234,13 +234,13 @@ qemu-system-xtensa \
 
 ----------
 
-# 📸 Screenshots
+# Screenshots
 
 All execution logs and build proofs are available in the **/Screenshots** folder.
 
 ----------
 
-# 📄 Full Documentation
+# Full Documentation
 
 A complete, step-by-step report with all logs, explanations, and screenshots is provided here:
 
@@ -248,7 +248,7 @@ A complete, step-by-step report with all logs, explanations, and screenshots is 
 
 ----------
 
-# 🧠 Learnings
+# Learnings
 
 -   ESP-IDF toolchain setup and environment handling
     
@@ -267,6 +267,6 @@ A complete, step-by-step report with all logs, explanations, and screenshots is 
 
 ----------
 
-# 📜 License
+# License
 
 Open-source for learning, research, and reference.
