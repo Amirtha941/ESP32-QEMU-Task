@@ -17,31 +17,55 @@ The repository includes the full setup, example programs, screenshots, and docum
 ## 📂 **Repository Structure**
 
 ```
-ESP32-QEMU-Emulation-Task/
+ESP32-QEMU-Task/
 │
 ├── README.md
 ├── report.md
 │
-├── blink/ # LED Blink program (ESP-IDF) │   ├── main/
+├── blink/
+│   ├── main/
+│   │   ├── main.c
+│   │   ├── blink.c
+│   │   └── CMakeLists.txt
 │   ├── CMakeLists.txt
 │   └── sdkconfig
 │
-├── temp-sensor/ # Temperature simulation program │   ├── main/
+├── temp-sensor/
+│   ├── main/
+│   │   ├── temp_sensor.c
+│   │   └── CMakeLists.txt
 │   ├── CMakeLists.txt
 │   └── sdkconfig
 │
-├── screenshots/
-│   ├── blink_output.png
-│   ├── temp_output.png
+├── Screenshots/
+│   ├── screenshot1.png
+│   ├── 2.png
+│   ├── 3.png
+│   ├── ...
+│   ├── all/
+│   │   ├── p1.png
+│   │   ├── p2.png
+│   │   ├── p3.png
+│   │   ├── ...
+│   │   ├── p18.png
+│   │   ├── ...
+│   │   ├── 
+│   │   ├── p49.png
+│   │   └── (all raw screenshots )
+│   └── 01_prereq_install.png
+|   |__ ....
 │
-└── qemu_build/ # Optional: QEMU build notes or files
+└── (optional)
+    └── .gitignore
+
+
 ``` 
 
 ----------
 
 ## ⚙️ **Environment Used**
 
--   **OS:** Ubuntu
+-   **OS:** Ubuntu 22.04.5 LTS(inside Oracle Virtual Box)
     
 -   **ESP-IDF Version:** v5.1
     
@@ -101,7 +125,7 @@ Screenshots showing program outputs are available in `/screenshots`.
 
 A full step-by-step detailed report is available in:
 
-👉 `report.md`
+👉 [report.md](report.md)
 
 ----------
 
