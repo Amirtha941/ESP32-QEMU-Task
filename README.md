@@ -75,7 +75,7 @@ So you can run:
 
 -   `blink.bin`
     
--   `hello_world.bin`
+-   `temp_sensor.bin`
     
 -   any ESP32 project
     
