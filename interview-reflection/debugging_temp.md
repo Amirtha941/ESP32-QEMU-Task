@@ -27,7 +27,7 @@ Before building the project, the ESP-IDF environment must be activated:
 
 Initially, `idf.py` was not found because this step was skipped.
 
-![02_export_idf](interview-reflection/temp_pics/02_export_idf.png)
+![02_export_idf](temp_pics/02_export_idf.png)
 
 
 ----------
@@ -36,7 +36,7 @@ Initially, `idf.py` was not found because this step was skipped.
 
 After exporting the environment correctly, the build system (CMake + Ninja) ran and began compiling the project.
 
-![03_build_idf](interview-reflection/temp_pics/03_build_idf.png)
+![03_build_idf](temp_pics/03_build_idf.png)
 
 
 ----------
@@ -49,7 +49,7 @@ The build failed with:
 
 This was due to the invalid `if (temperature 40)`.
 
-![04_compile_error](interview-reflection/temp_pics/04_compile_error.png)
+![04_compile_error](temp_pics/04_compile_error.png)
 
 
 ----------
@@ -64,7 +64,7 @@ After identifying the mistake, the condition was corrected:
 
 Braces and indentation were also cleaned up to improve clarity.
 
-![05_correct_code](interview-reflection/temp_pics/05_correct_code.png)
+![05_correct_code](temp_pics/05_correct_code.png)
 
 
 ----------
@@ -82,7 +82,7 @@ This verified:
 -   Memory layout correct
     
 
-![06_spi_flash](interview-reflection/temp_pics/06_spi_flash.png)
+![06_spi_flash](temp_pics/06_spi_flash.png)
 
 
 ----------
@@ -95,7 +95,7 @@ Once flashed, the program ran continuously in QEMU, printing stable temperature 
 
 This confirmed the logic and environment setup were fully correct.
 
-![07_temp_output](interview-reflection/temp_pics/07_temp_output.png)
+![07_temp_output](temp_pics/07_temp_output.png)
 
 
 ----------
