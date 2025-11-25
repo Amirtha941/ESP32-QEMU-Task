@@ -10,7 +10,6 @@ Every screenshot is referenced in order from:
 
 ----------
 
-----------
 
 # ## 1️⃣ Incorrect Code Modifications
 
@@ -31,7 +30,7 @@ As a result, the old binary kept running and I mistakenly thought “even with e
 
 ----------
 
-![02_make_errors_in_blink.png](../blink_pics/02_make_errors_in_blink.png)
+![02_make_errors_in_blink.png](./blink_pics/02_make_errors_in_blink.png)
 
 
 `![Incorrect Code](interview-reflection/blink_pics/01_initializing_esp-idf.png)`
@@ -45,7 +44,6 @@ This image shows the invalid code:
 
 These mistakes must trigger compilation errors — but the firmware didn’t update because I hadn’t rebuilt it yet.
 
-----------
 
 ----------
 
@@ -70,7 +68,7 @@ This sets:
 
 ----------
 
-![01_initializing_esp-idf.png](../blink_pics/01_initializing_esp-idf.png)
+![01_initializing_esp-idf.png](./blink_pics/01_initializing_esp-idf.png)
 
 
 `![ESP-IDF Export](interview-reflection/blink_pics/02_make_errors_in_blink.png)`
@@ -79,7 +77,6 @@ This output shows the environment activating correctly.
 
 ----------
 
-----------
 
 # ## 3️⃣ Build Attempt With Errors
 
@@ -95,13 +92,13 @@ ESP-IDF correctly reported the errors in the file.
 
 ### 📷 Screenshot 03 — _Build Started_
 
-![Build Started](interview-reflection/blink_pics/03_build_idf.png)
+![Build Started](blink_pics/03_build_idf.png)
 
 ----------
 
 ### 📷 Screenshot 04 — _Compilation Errors Detected_
 
-![Compilation Error](interview-reflection/blink_pics/04_compilation_error.png)
+![Compilation Error](blink_pics/04_compilation_error.png)
 
 Errors shown:
 
@@ -116,13 +113,13 @@ Errors shown:
 
 ### 📷 Screenshot 05 — _Build Failed – ninja stopped_
 
-![Build Failed](interview-reflection/blink_pics/05_idf_fail.png)
+![Build Failed](blink_pics/05_idf_fail.png)
 
 This is correct behavior — the build MUST fail.
 
 ----------
 
-----------
+
 
 # ## 4️⃣ Correcting the Mistakes
 
@@ -135,12 +132,12 @@ After the interview, I restored the proper code:
 
 ----------
 
-![06_corrected_code.png](../blink_pics/06_corrected_code.png)
+![06_corrected_code.png](./blink_pics/06_corrected_code.png)
 
 
 `![Corrected Code](interview-reflection/blink_pics/06_corrected_code.png)`
 
-----------
+
 
 ----------
 
@@ -158,15 +155,11 @@ idf.py build`
 -   `build` creates a fresh new binary
     
 
-----------
 
 
-
-![Rebuild Successful](interview-reflection/blink_pics/07_rebuild.png)
+![Rebuild Successful](blink_pics/07_rebuild.png)
 
 This is the **new, correct build**.
-
-----------
 
 ----------
 
@@ -200,11 +193,10 @@ Then create 4MB flash:
 `truncate -s 4M flash.bin`
 
 
-![Flash + Truncate](interview-reflection/blink_pics/08_flash_and_truncate.png)
+![Flash + Truncate](blink_pics/08_flash_and_truncate.png)
 
 `truncate -s 4M flash.bin` ensures QEMU sees a **4 MB flash chip**.
 
-----------
 
 ----------
 
@@ -234,7 +226,7 @@ Explanation:
 
 ### _Bootloader + Partition Table Output_
 
-![Boot](interview-reflection/blink_pics/09_initialize_flash.png)
+![Boot](blink_pics/09_initialize_flash.png)
 
 ----------
 
@@ -242,7 +234,7 @@ Explanation:
 This confirms the corrected program is finally running properly.
 
 ##  Guru Meditation Error (WDT Timeout)
-![11_guru_meditation_error.png](../blink_pics/11_guru_meditation_error.png)
+![11_guru_meditation_error.png](./blink_pics/11_guru_meditation_error.png)
 
 
 Here the ESP32 hits:
@@ -267,7 +259,7 @@ The real ESP32 will not show this watchdog error.
 
 ### Final LED ON/OFF Output (Correct)
 
-![Blink Final Output](interview-reflection/blink_pics/10_output.png)
+![Blink Final Output](blink_pics/10_output.png)
 
 Despite the watchdog errors, the application runs fine afterwards.
 
